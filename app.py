@@ -79,20 +79,20 @@ def main():
 
     if button:
         st.snow()
-        mime_type = file.type
-        if not file:
-            st.error("Please upload a video or image.")
-        if  "image" in mime_type:
-            img = plt.imread(file)
-            pred = predictImage(img, model)
-            st.write("Detected Image:")
-            st.image(pred,width=800,channels="RGB")
-        elif "video" in mime_type:
-           video(file,model)
+        
+        if file is None:
+            st.error("❌Please upload a video or image.")
+        else:     
+            mime_type = file.type
+            if  "image" in mime_type:
+                img = plt.imread(file)
+                pred = predictImage(img, model)
+                st.write("Detected Image:")
+                st.image(pred,width=800,channels="RGB")
+            elif "video" in mime_type:
+              video(file,model)
 
-    path="sampleImages"
     examples=list(Path("sampleImages").glob("*.jpg"))
-    example_filenames = [path.name for path in examples]
 
     # Display "Sample" on top
     st.write("## Sample")
@@ -109,8 +109,6 @@ def main():
                 st.image(str(image_path), use_column_width=True)
                 st.text(image_path.stem)  # Display filename without extension
     st.write("## Detected Video")
-    video_file = open('output_video.mp4', 'rb')
-    video_bytes = video_file.read()
     st.video('newout.mp4')
             
            
