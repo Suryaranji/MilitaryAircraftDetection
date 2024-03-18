@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 import os
 import tempfile
-
+from pathlib import Path
 def video(uploaded_file,model):
     st.title("Video Processing")
 
@@ -66,8 +66,11 @@ def main():
         st.title("About:")
         st.markdown(
             "- Detection of Military Aircraft using Object Detection.\n"\
-            "- If you want to identify the aircrafts in an image , you can upload it here."
-        )   
+            "- If you want to identify the aircrafts in an image , you can upload it here.\n"\
+            "- Video Detection also there You can just upload a video and download aircraft detected video as well"
+        )
+
+           
     st.title("Militiary Aircraft Detector")
     path="runs/detect/yolov8s_100_epochs/weights/best.pt"
     model=YOLO(path)
@@ -86,8 +89,30 @@ def main():
             st.image(pred,width=800,channels="RGB")
         elif "video" in mime_type:
            video(file,model)
+
+    path="sampleImages"
+    examples=list(Path("sampleImages").glob("*.jpg"))
+    example_filenames = [path.name for path in examples]
+
+    # Display "Sample" on top
+    st.write("## Sample")
+
+    # Display sample images and their names
+    num_cols = 3
+    num_images = len(examples)
+    num_rows = (num_images + num_cols - 1) // num_cols
+
+    for row in range(num_rows):
+        col1, col2, col3 = st.columns(3)
+        for col, image_path in zip((col1, col2, col3), examples[row * num_cols: (row + 1) * num_cols]):
+            with col:
+                st.image(str(image_path), use_column_width=True)
+                st.text(image_path.stem)  # Display filename without extension
+    st.write("## Detected Video")
+    video_file = open('output_video.mp4', 'rb')
+    video_bytes = video_file.read()
+    st.video('newout.mp4')
             
            
 if __name__ == "__main__":
-   
     main()
