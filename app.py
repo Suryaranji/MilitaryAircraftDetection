@@ -95,7 +95,7 @@ def main():
     examples=list(Path("sampleImages").glob("*.jpg"))
 
     # Display "Sample" on top
-    st.write("## Sample")
+    st.write("## Sample Images")
 
     # Display sample images and their names
     num_cols = 3
@@ -106,8 +106,8 @@ def main():
         col1, col2, col3 = st.columns(3)
         for col, image_path in zip((col1, col2, col3), examples[row * num_cols: (row + 1) * num_cols]):
             with col:
-                st.image(str(image_path), use_column_width=True)
-                st.text(image_path.stem)  # Display filename without extension
+                st.image(str(image_path), width=200,caption=image_path.stem)
+                #st.text()  # Display filename without extension
     st.write("## Detected Video")
     st.video('newout.mp4')
             
